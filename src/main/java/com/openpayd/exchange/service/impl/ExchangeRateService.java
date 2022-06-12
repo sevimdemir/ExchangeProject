@@ -3,7 +3,7 @@ package com.openpayd.exchange.service.impl;
 import com.openpayd.exchange.dto.ExchangeRate;
 import com.openpayd.exchange.dto.FixerApiResponse;
 import com.openpayd.exchange.exception.BaseException;
-import com.openpayd.exchange.exception.NoDataFoundException;
+import com.openpayd.exchange.exception.NoCurrencyFoundException;
 import com.openpayd.exchange.exception.RemoteServiceException;
 import com.openpayd.exchange.persist.repository.IExchangeRatesRepository;
 import com.openpayd.exchange.service.IExchangeRateService;
@@ -17,9 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.util.UriTemplate;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +39,7 @@ public class ExchangeRateService implements IExchangeRateService {
         try {
             todaysRateOf = exchangeRatesRepository.getTodaysRateOf(currency);
             return todaysRateOf;
-        } catch (BaseException baseException) {
+        } catch (NoCurrencyFoundException baseException) {
             createExchangeRates();
         }
         todaysRateOf = exchangeRatesRepository.getTodaysRateOf(currency);

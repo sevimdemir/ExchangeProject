@@ -22,7 +22,7 @@ public class ExchangeRatesEntity {
     @Column(name = "currency", nullable = false)
     private String currency;
 
-    @Column(name = "rate", nullable = false)
+    @Column(name = "rate", nullable = false, precision = 25, scale = 6)
     private BigDecimal rate;
 
     @Column(name = "operation_date", nullable = false)

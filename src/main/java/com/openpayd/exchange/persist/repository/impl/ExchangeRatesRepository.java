@@ -1,16 +1,17 @@
 package com.openpayd.exchange.persist.repository.impl;
 
-import com.openpayd.exchange.dto.ConvertionRate;
 import com.openpayd.exchange.dto.ExchangeRate;
 import com.openpayd.exchange.dto.FixerApiResponse;
 import com.openpayd.exchange.exception.BaseException;
-import com.openpayd.exchange.exception.NoDataFoundException;
+import com.openpayd.exchange.exception.NoCurrencyFoundException;
+import com.openpayd.exchange.exception.UnSupportedCurrencyException;
 import com.openpayd.exchange.persist.dao.IExchangeRatesDao;
 import com.openpayd.exchange.persist.entity.ExchangeRatesEntity;
 import com.openpayd.exchange.persist.repository.IExchangeRatesRepository;
 import com.openpayd.exchange.util.DateUtils;
 import com.openpayd.exchange.util.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -25,11 +26,17 @@ public class ExchangeRatesRepository implements IExchangeRatesRepository {
 
     private final ObjectMapper mapper;
 
+    private final Environment environment;
+
     @Override
     public ExchangeRate getTodaysRateOf(String currency) throws BaseException {
         Optional<ExchangeRatesEntity> exchangeRate = exchangeRatesDao.findByCurrencyAndOperationDate(currency, DateUtils.getTodayDate());
         if (exchangeRate.isEmpty()) {
-            throw new NoDataFoundException(currency);
+            Optional<ExchangeRatesEntity> exchangeBaseRate = exchangeRatesDao.findByCurrencyAndOperationDate(environment.getProperty("api.exchange.currency"), DateUtils.getTodayDate());
+            if (exchangeBaseRate.isPresent()) {
+                throw new UnSupportedCurrencyException(currency);
+            }
+            throw new NoCurrencyFoundException(currency);
         }
         return mapper.entityToDto(exchangeRate.get());
     }

@@ -15,6 +15,8 @@ import java.util.Date;
 @Builder
 public class ExchangeTransaction implements Serializable {
 
+    private Long id;
+
     private String fromCurrency;
 
     private String toCurrency;
@@ -24,4 +26,8 @@ public class ExchangeTransaction implements Serializable {
     private BigDecimal toRate;
 
     private Date transactionDate;
+
+    private BigDecimal amount;
+
+    private BigDecimal convertAmount;
 }

@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 @RequiredArgsConstructor
 public class ExchangeRateController {
 
-    private final IConvertionService exchangeRateService;
+    private final IConvertionService convertionService;
 
     @GetMapping("/convertion-rate")
     @ApiOperation(value = "convert rate from and to currency")
@@ -29,18 +29,6 @@ public class ExchangeRateController {
                 .fromCurrency(fromCurrency.toUpperCase())
                 .toCurrency(toCurrency.toUpperCase())
                 .build();
-        return JsonResponse.success(exchangeRateService.convertionRate(convertionRate)).toResponseEntity(HttpStatus.OK);
-    }
-
-    @GetMapping("/convertion-amount")
-    @ApiOperation(value = "convert rate from and to currency")
-    public ResponseEntity<JsonResponse> convertionAmount(@RequestParam @Size(min=3, max=3) String fromCurrency,
-                                                         @RequestParam @Size(min=3, max=3) String toCurrency,
-                                                         @RequestParam String amount) throws BaseException {
-        ConvertionRate convertionRate = ConvertionRate.builder()
-                .fromCurrency(fromCurrency.toUpperCase())
-                .toCurrency(toCurrency.toUpperCase())
-                .build();
-        return JsonResponse.success(exchangeRateService.convertionRate(convertionRate)).toResponseEntity(HttpStatus.OK);
+        return JsonResponse.success(convertionService.convertionRate(convertionRate)).toResponseEntity(HttpStatus.OK);
     }
 }

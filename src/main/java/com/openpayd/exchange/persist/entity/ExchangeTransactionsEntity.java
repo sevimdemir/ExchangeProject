@@ -27,11 +27,17 @@ public class ExchangeTransactionsEntity {
     @Column(name = "to_currency", nullable = false)
     private String toCurrency;
 
-    @Column(name = "from_rate", nullable = false)
+    @Column(name = "from_rate", nullable = false, precision = 25, scale = 6)
     private BigDecimal fromRate;
 
-    @Column(name = "to_rate", nullable = false)
+    @Column(name = "to_rate", nullable = false, precision = 25, scale = 6)
     private BigDecimal toRate;
+
+    @Column(name = "amount", nullable = false, precision = 25, scale = 2)
+    private BigDecimal amount;
+
+    @Column(name = "convert_amount", nullable = false, precision = 25, scale = 2)
+    private BigDecimal convertAmount;
 
     @Column(name = "transaction_date", nullable = false)
     private Date transactionDate;
